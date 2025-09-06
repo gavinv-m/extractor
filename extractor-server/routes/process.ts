@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PDFDocument } from 'pdf-lib';
 import upload from '../utils/upload.ts';
+import analyseDocument from '../utils/document-analyser.ts';
 
 const processRouter = Router();
 
@@ -21,26 +22,30 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
     const originalPdf: PDFDocument = await PDFDocument.load(req.file.buffer);
 
     if (input === 'all') {
-      const totalPages = originalPdf.getPageCount();
+      const totalPages: number = originalPdf.getPageCount();
       pagesToCrop = Array.from({ length: totalPages }, (_, i) => i);
     } else {
       pagesToCrop = (input as number[]).map((p) => p - 1); // convert to 0-based
     }
 
-    const newPdf: PDFDocument = await PDFDocument.create();
+    // Break pdf into two-page documents
+    const buffers: Buffer[] = [];
 
-    const copiedPages = await newPdf.copyPages(originalPdf, pagesToCrop);
-    copiedPages.forEach((page) => newPdf.addPage(page));
+    for (let i = 0; i < pagesToCrop.length; i += 2) {
+      const newPdf: PDFDocument = await PDFDocument.create();
 
-    const pdfBytes = await newPdf.save();
+      const pageIndices = pagesToCrop.slice(i, i + 2);
+      const copiedPages = await newPdf.copyPages(originalPdf, pageIndices);
+      copiedPages.forEach((page) => newPdf.addPage(page));
 
-    res
-      .set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename=extracted.pdf',
-        'Content-Length': pdfBytes.length,
-      })
-      .send(Buffer.from(pdfBytes));
+      const pdfBytes = await newPdf.save();
+
+      buffers.push(Buffer.from(pdfBytes));
+    }
+
+    const result = await analyseDocument(buffers);
+
+    res.send('ok');
   } catch (error) {
     console.error('Failed to parse file:', error);
     res.status(500).json({ error: 'Error occured' });
