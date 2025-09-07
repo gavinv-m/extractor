@@ -43,7 +43,8 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
       buffers.push(Buffer.from(pdfBytes));
     }
 
-    const result = await analyseDocument(buffers);
+    const pages: any = await analyseDocument(buffers);
+    console.log(pages);
 
     res.send('ok');
   } catch (error) {

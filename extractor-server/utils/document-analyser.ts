@@ -5,8 +5,6 @@ import { AzureKeyCredential } from '@azure/core-auth';
 import { azure } from '../config.ts';
 
 export default async function analyseDocument(buffers: Buffer[]) {
-  console.log('Called');
-
   try {
     const client = DocumentIntelligence(
       azure.endpoint,
@@ -65,13 +63,15 @@ export default async function analyseDocument(buffers: Buffer[]) {
       })
     );
 
-    results.forEach((result, i) => {
-      console.log(`=== Document ${i + 1} ===`);
-      console.log(result);
-      result.pages.forEach((page, pageIndex) => {
-        console.log(`--- Page ${pageIndex + 1} ---`);
+    const pages: any = [];
+    results.forEach((doc) => {
+      const documentPages = doc.content.split('<!-- PageNumber="');
+      documentPages.forEach((page: any) => {
+        pages.push(page);
       });
     });
+
+    return pages;
   } catch (err) {
     console.error('Document analysis failed:', err);
     throw err;
