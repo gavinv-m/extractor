@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { PDFDocument } from 'pdf-lib';
 import upload from '../utils/upload.ts';
 import analyseDocument from '../utils/document-analyser.ts';
+import formatContent from '../utils/format.ts';
 
 const processRouter = Router();
 
@@ -43,8 +44,8 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
       buffers.push(Buffer.from(pdfBytes));
     }
 
-    const pages: any = await analyseDocument(buffers);
-    console.log(pages);
+    const pages: string[] = await analyseDocument(buffers);
+    const processedPages: any = await formatContent(pages);
 
     res.send('ok');
   } catch (error) {
