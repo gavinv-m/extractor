@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "multer": "^2.0.2",
+    "pdfjs-dist": "^5.3.93",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-pdf": "^10.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

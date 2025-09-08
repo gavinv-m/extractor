@@ -48,6 +48,9 @@ export default function Upload({ onUploadSuccess }) {
       body: formData,
     });
 
+    const data = await response.json();
+    onUploadSuccess(data);
+
     // const blob = await response.blob();
     // const url = URL.createObjectURL(blob);
     // const link = document.createElement('a');
@@ -57,7 +60,6 @@ export default function Upload({ onUploadSuccess }) {
     // link.click();
     // link.remove();
     // URL.revokeObjectURL(url);
-    onUploadSuccess(response);
   };
 
   return (

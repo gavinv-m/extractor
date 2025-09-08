@@ -6,18 +6,21 @@ const VIEWS = ['upload', 'viewer'];
 
 export default function App() {
   const [currentView, setCurrentView] = useState(VIEWS[0]);
-  const [extractedData, setExtractedData] = useState(null);
+  const [docData, setDocData] = useState({ text: null, docUrl: null });
 
   const handleUploadSuccess = (data) => {
-    setExtractedData(data);
+    setDocData({ text: data.text, docUrl: data.docUrl });
     setCurrentView('viewer');
   };
+
   return (
     <>
       {currentView === 'upload' && (
         <Upload onUploadSuccess={handleUploadSuccess}></Upload>
       )}
-      {currentView === 'viewer' && <Viewer data={extractedData}></Viewer>}
+      {currentView === 'viewer' && (
+        <Viewer text={docData.text} docUrl={docData.docUrl}></Viewer>
+      )}
     </>
   );
 }
