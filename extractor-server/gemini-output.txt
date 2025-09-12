@@ -1,0 +1,182 @@
+
+        === PAGE 1 ===
+        # Group of companies
+
+## Section 41: Definition
+
+- Section 1 definition
+
+The following companies are excluded from this definition:
+
+- A co-operative
+- An association formed in South Africa to serve a specified purpose beneficial to the
+public or a section of the public
+- A foreign collective investment scheme
+- A non-profit company
+- A company whose gross income is exempt from tax in terms of s10
+- A company that is a public benefit organization or a recreational club
+- A company formed in a foreign country, unless it has its place of effective management
+in South Africa
+- Any company that has its place of effective management outside South Africa
+
+o Becerding
+ights Reserved
+
+<figure>
+
+you wy un
+upnidd . University of Cape Town .
+
+COLLEGE OF
+ACCOUNTING
+
+INSPIRING LEADERS, IGNITING OPPORTUNITY
+
+</figure>
+
+<!-- PageBreak -->
+
+## Group of companies
+
+### Section 41: Definition (continued)
+
+For the purpose of this definition, certain shares are not deemed
+to be equity shares:
+
+- Shares that are held as trading stock
+- Shares that are subject to a contractual obligation or option to
+be bought or sold by any person at less than or more than
+market value on the date of the transaction
+
+Becerding
+ghts Reserved
+
+<figure>
+
+COLLEGE OF
+ACCOUNTING
+
+INSPIRING LEADERS, IGNITING OPPORTUNITY
+
+</figure>
+        === PAGE 2 ===
+        Ty of Cape Town . it
+SPES BONA
+
+# COLLEGE OF ACCOUNTING
+
+INSPIRING LEADERS, IGNITING OPPORTUNITY
+
+Intra-group transactions
+Section 45
+
+Recording
+o25 , Al &ht Reserved
+
+SPES BONA
+
+# Intra-group Transactions
+
+Controlling Group
+Company
+
+≥70%
+
+≥70%
+
+Controlled Group Company 1
+
+Asset
+
+Controlled Group Company 2
+
+Asset
+
+Seller/Transferor
+(SA Resident)
+
+Acquirer/Transferee
+(SA Resident)
+
+Seller
+
+Acquirer
+
+Trading stock
+>
+
+Trading stock
+
+Capital Asset
+>
+
+Capital Asset
+
+The Acquirer (Transferee)
+
+C
+Becerding
+oghts Reserved
+
+yor cope way TO
+COLLEGE OF
+ACCOUNTING
+
+INSPIRING LEADERS, IGNITING OPPORTUNITY
+        === PAGE 3 ===
+        # Intra-group Transactions
+
+## Section 45(2) & 45(3) - The Transferor Company
+
+Where a transferor company disposes of an asset in terms of an intra-group transaction:
+
+- The transferor company is deemed to dispose of the asset for its tax cost (i.e. Base cost or trading stock value)
+- The transferor company does not recoup any of the previous allowances in the year of transfer
+
+Income Tax Effect
+
+No gain/loss (trading stock); No capital gain/loss (capital asset); No Recoupment (allowance Asset)
+
+Recording oghts Reserved
+
+## Intra-group Transactions
+
+### Section 45(2) & 45(3) - The Transferee Company
+
+Where a transferor company disposes of an asset in terms of an intra-group transaction:
+
+- The transferor company and transferee company are deemed to be one and the same person with respect to:
+- The date of acquisition of the asset
+- The amount and date of incurral of expenditure
+- The amount of any allowances or recoupments that the transferee company is entitled to
+- s24/24C allowances
+
+#### Income Tax Effect
+
+The tax cost of the asset in the hands of the transferee company is based on the tax cost of the asset in the hands of the transferor company.
+(If the transferee company disposes of the capital asset or trading stock in a following year of assessment, the full gain between the proceeds and tax cost of the asset in the hands of the transferor will be taxed in the hands of the transferee)
+
+ity of Can oBecerding ghts Reserved
+        === PAGE 4 ===
+        # Intra-group Transactions
+
+## Section 45(6)
+
+### Section 45 does not apply to the following transactions:
+
+- The transferee company and the transferor company agree in writing that the provision will not apply
+- All receipts and accruals of the transferee company are exempt in terms of s10(1)(cA), s10(1)(cN), S10(1)(cO), S10(1)(d) and s10(1)(t)
+- The asset was disposed of by the transferor company in exchange for equity shares issued by the transferee company
+- The asset was disposed of by the transferor company to the transferee company in terms of a liquidation distribution as referred to in s47
+- The asset transferred is a share in the transferee company
+
+Recording
+ights Reserved
+
+<!-- PageFooter="NOSAIT Reference: 18.6" -->
+
+Prod" University of Cape Town . iY
+COLLEGE OF
+ACCOUNTING
+
+INSPIRING LEADERS, IGNITING OPPORTUNITY
