@@ -23,7 +23,9 @@ export default async function analyseDocument(buffers: Buffer[]) {
               base64Source: base64String,
             },
             queryParameters: {
-              outputContentFormat: 'markdown',
+              outputContentFormat: 'text',
+              includeTextContent: true,
+              includeFigures: true,
             },
             contentType: 'application/json',
           });
@@ -63,15 +65,7 @@ export default async function analyseDocument(buffers: Buffer[]) {
       })
     );
 
-    const pages: any = [];
-    results.forEach((doc) => {
-      const documentPages = doc.content.split('<!-- PageNumber="');
-      documentPages.forEach((page: any) => {
-        pages.push(page);
-      });
-    });
-
-    return pages;
+    return results;
   } catch (err) {
     console.error('Document analysis failed:', err);
     throw err;

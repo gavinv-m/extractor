@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { PDFDocument } from 'pdf-lib';
 import upload from '../utils/upload.ts';
 import analyseDocument from '../utils/document-analyser.ts';
-import formatContent from '../utils/format.ts';
+import structureForClient from '../utils/structure-text.ts';
 import fs from 'fs';
 import path from 'path';
 
@@ -47,8 +47,8 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
       buffers.push(Buffer.from(pdfBytes));
     }
 
-    const pages: string[] = await analyseDocument(buffers);
-    const processedPages: any = await formatContent(pages);
+    const azureResponse: any = await analyseDocument(buffers);
+    const structuredText = structureForClient(azureResponse[0]);
 
     // Create a new PDF with only selected pages, send as response
     const newPdf: PDFDocument = await PDFDocument.create();
@@ -61,22 +61,9 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
     const filePath = path.join('tmp', filename);
     fs.writeFileSync(filePath, pdfBytes);
 
-    const outputPath = path.join(process.cwd(), 'processed-text.txt');
-    // Clear the file at the start (so you don't keep appending across runs)
-    fs.writeFileSync(outputPath, '', 'utf8');
-    // Gemini Output
-    processedPages.forEach((page: any, index: number) => {
-      const pageText = `
-        === PAGE ${index + 1} ===
-        ${page.structuredText}`;
-
-      fs.appendFileSync(outputPath, pageText, 'utf8');
-    });
-
     // TODO: Toggle betweeen development and production
     res.json({
       docUrl: `http://localhost:3000/tmp/${filename}`,
-      text: processedPages,
     });
   } catch (error) {
     console.error('Failed to parse file:', error);
