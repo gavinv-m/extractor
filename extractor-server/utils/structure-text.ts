@@ -1,4 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
+
 interface PageElement {
+  id: string;
   type: string;
   content?: string;
   role?: string;
@@ -8,6 +11,7 @@ interface PageElement {
 }
 
 interface Page {
+  id: string;
   number: number;
   elements: PageElement[];
 }
@@ -44,12 +48,13 @@ export default function structureForClient(ocrResult: any) {
         // Add or find page
         let page = schema.pages.find((p) => p.number === pageNumber);
         if (!page) {
-          page = { number: pageNumber, elements: [] };
+          page = { id: uuidv4(), number: pageNumber, elements: [] };
           schema.pages.push(page);
         }
 
         // Add an element
         page.elements.push({
+          id: uuidv4(),
           type: 'paragraph',
           content: paragraphText,
           role: paragraphRole,
@@ -66,7 +71,7 @@ export default function structureForClient(ocrResult: any) {
         // Add or find page
         let page = schema.pages.find((p) => p.number === pageNumber);
         if (!page) {
-          page = { number: pageNumber, elements: [] };
+          page = { id: uuidv4(), number: pageNumber, elements: [] };
           schema.pages.push(page);
         }
 
@@ -78,6 +83,7 @@ export default function structureForClient(ocrResult: any) {
 
         // Add table element
         page.elements.push({
+          id: uuidv4(),
           type: 'table',
           tableRows,
           tableCols,
@@ -100,6 +106,5 @@ export default function structureForClient(ocrResult: any) {
       parseSection(section, i)
     );
   }
-
   return schema;
 }

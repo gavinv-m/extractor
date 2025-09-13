@@ -63,6 +63,7 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
 
     // TODO: Toggle betweeen development and production
     res.json({
+      text: structuredText,
       docUrl: `http://localhost:3000/tmp/${filename}`,
     });
   } catch (error) {
