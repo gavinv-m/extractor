@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import Upload from './Upload.jsx';
-import Viewer from './Viewer.jsx';
+import DocumentPreview from './Viewer.jsx';
+import EditablePanel from './components/editor/EditablePanel.jsx';
 
 const VIEWS = ['upload', 'viewer'];
 
 export default function App() {
   const [currentView, setCurrentView] = useState(VIEWS[0]);
-  const [docData, setDocData] = useState({ text: null, docUrl: null });
+  const [docData, setDocData] = useState({ pages: [], docUrl: null });
 
   const handleUploadSuccess = (data) => {
-    setDocData({ text: data.text, docUrl: data.docUrl });
+    setDocData({ pages: data.text.pages, docUrl: data.docUrl });
     setCurrentView('viewer');
   };
 
@@ -19,7 +20,10 @@ export default function App() {
         <Upload onUploadSuccess={handleUploadSuccess}></Upload>
       )}
       {currentView === 'viewer' && (
-        <Viewer text={docData.text} docUrl={docData.docUrl}></Viewer>
+        <div>
+          <DocumentPreview docUrl={docData.docUrl}></DocumentPreview>
+          <EditablePanel pages={docData.pages}></EditablePanel>
+        </div>
       )}
     </>
   );

@@ -50,16 +50,6 @@ export default function Upload({ onUploadSuccess }) {
 
     const data = await response.json();
     onUploadSuccess(data);
-
-    // const blob = await response.blob();
-    // const url = URL.createObjectURL(blob);
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.download = 'extracted.pdf';
-    // document.body.appendChild(link);
-    // link.click();
-    // link.remove();
-    // URL.revokeObjectURL(url);
   };
 
   return (
