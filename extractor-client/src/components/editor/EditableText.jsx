@@ -1,5 +1,9 @@
 // Exports to ParagraphElement & TableElement
-// TODO: Add onChange func
-export default function EditableText({ value }) {
-  return <textarea value={value}></textarea>;
+export default function EditableText({ value, onChange }) {
+  return (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    ></textarea>
+  );
 }

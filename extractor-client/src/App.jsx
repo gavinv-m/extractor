@@ -14,6 +14,25 @@ export default function App() {
     setCurrentView('viewer');
   };
 
+  const handleParagraphChange = (pageNumber, elementID, newValue) => {
+    setDocData((prev) => ({
+      ...prev,
+      pages: prev.pages.map((page) => {
+        if (page.number === pageNumber) {
+          return {
+            ...page,
+            elements: page.elements.map((element) =>
+              element.id === elementID
+                ? { ...element, content: newValue }
+                : element
+            ),
+          };
+        }
+        return page;
+      }),
+    }));
+  };
+
   return (
     <>
       {currentView === 'upload' && (
@@ -22,7 +41,10 @@ export default function App() {
       {currentView === 'viewer' && (
         <div>
           <DocumentPreview docUrl={docData.docUrl}></DocumentPreview>
-          <EditablePanel pages={docData.pages}></EditablePanel>
+          <EditablePanel
+            pages={docData.pages}
+            onParagraphChange={handleParagraphChange}
+          ></EditablePanel>
         </div>
       )}
     </>
