@@ -33,6 +33,32 @@ export default function App() {
     }));
   };
 
+  const handleTableCellChange = (pageNumber, tableID, cellIndex, newValue) => {
+    console.log(pageNumber, tableID, cellIndex, newValue);
+    setDocData((prev) => ({
+      ...prev,
+      pages: prev.pages.map((page) => {
+        if (page.number === pageNumber) {
+          return {
+            ...page,
+            elements: page.elements.map((element) => {
+              if (element.id === tableID) {
+                // create a new cells array with the updated value
+                const updatedCells = element.tableCells.map((cell, idx) =>
+                  idx === cellIndex ? newValue : cell
+                );
+
+                return { ...element, tableCells: updatedCells };
+              }
+              return element;
+            }),
+          };
+        }
+        return page;
+      }),
+    }));
+  };
+
   return (
     <>
       {currentView === 'upload' && (
@@ -44,6 +70,7 @@ export default function App() {
           <EditablePanel
             pages={docData.pages}
             onParagraphChange={handleParagraphChange}
+            onCellChange={handleTableCellChange}
           ></EditablePanel>
         </div>
       )}

@@ -1,7 +1,14 @@
 import EditableText from './EditableText';
 
 // Exports to EditablePanel
-export default function TableElement({ rows, cols, cells }) {
+export default function TableElement({
+  rows,
+  cols,
+  cells,
+  pageNumber,
+  tableID,
+  onCellChange,
+}) {
   const tableRows = [];
 
   //   Cells is flat array, split into rows
@@ -9,16 +16,29 @@ export default function TableElement({ rows, cols, cells }) {
     tableRows.push(cells.slice(i * cols, (i + 1) * cols));
   }
 
+  const handleChange = (newValue) => {
+    onCellChange(pageNumber, tableID, newValue);
+  };
+
   return (
     <table>
       <tbody>
         {tableRows.map((row, rowIndex) => (
           <tr key={rowIndex}>
-            {row.map((cell, colIndex) => (
-              <td key={colIndex}>
-                <EditableText value={cell} />
-              </td>
-            ))}
+            {row.map((cell, colIndex) => {
+              const cellIndex = rowIndex * cols + colIndex;
+
+              return (
+                <td key={colIndex}>
+                  <EditableText
+                    value={cell}
+                    onChange={(newValue) =>
+                      onCellChange(pageNumber, tableID, cellIndex, newValue)
+                    }
+                  />
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

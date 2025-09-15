@@ -3,7 +3,11 @@ import Heading from './Heading';
 import TableElement from './TableElement';
 
 // Exports to App.jsx
-export default function EditablePanel({ pages, onParagraphChange }) {
+export default function EditablePanel({
+  pages,
+  onParagraphChange,
+  onCellChange,
+}) {
   return (
     <>
       {pages.map((page) => (
@@ -37,6 +41,9 @@ export default function EditablePanel({ pages, onParagraphChange }) {
                   rows={element.tableRows}
                   cols={element.tableCols}
                   cells={element.tableCells}
+                  pageNumber={page.number}
+                  tableID={element.id}
+                  onCellChange={onCellChange}
                 />
               );
             }
