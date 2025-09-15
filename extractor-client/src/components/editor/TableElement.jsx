@@ -9,39 +9,39 @@ export default function TableElement({
   tableID,
   onCellChange,
 }) {
-  const tableRows = [];
+  const table = Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => '')
+  );
 
-  //   Cells is flat array, split into rows
-  for (let i = 0; i < rows; i++) {
-    tableRows.push(cells.slice(i * cols, (i + 1) * cols));
-  }
+  cells.forEach((cell) => {
+    table[cell.rowIndex][cell.columnIndex] = cell;
+  });
 
-  const handleChange = (newValue) => {
-    onCellChange(pageNumber, tableID, newValue);
+  const handleChange = (cellId, newValue) => {
+    onCellChange(pageNumber, tableID, cellId, newValue);
   };
 
   return (
-    <table>
-      <tbody>
-        {tableRows.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {row.map((cell, colIndex) => {
-              const cellIndex = rowIndex * cols + colIndex;
-
-              return (
-                <td key={colIndex}>
-                  <EditableText
-                    value={cell}
-                    onChange={(newValue) =>
-                      onCellChange(pageNumber, tableID, cellIndex, newValue)
-                    }
-                  />
-                </td>
-              );
-            })}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      {table.map((row, rowIndex) => (
+        <tr key={rowIndex}>
+          {row.map((cell, colIndex) => {
+            if (!cell) return null;
+            return (
+              <td
+                key={cell.id}
+                rowSpan={cell.rowSpan || 1}
+                colSpan={cell.colSpan || 1}
+              >
+                <EditableText
+                  value={cell.content}
+                  onChange={(newValue) => handleChange(cell.id, newValue)}
+                />
+              </td>
+            );
+          })}
+        </tr>
+      ))}
+    </>
   );
 }

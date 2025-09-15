@@ -77,9 +77,14 @@ export default function structureForClient(ocrResult: any) {
 
         const tableRows: number = table.rowCount;
         const tableCols: number = table.columnCount;
-        const tableCells: string[] = table.cells.map(
-          (cell: { content: string }) => cell.content
-        );
+        const tableCells: string[] = table.cells.map((cell: any) => ({
+          id: uuidv4(),
+          rowIndex: cell.rowIndex,
+          columnIndex: cell.columnIndex,
+          content: cell.content,
+          rowSpan: cell.rowSpan || 1,
+          colSpan: cell.colSpan || 1,
+        }));
 
         // Add table element
         page.elements.push({
