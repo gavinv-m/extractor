@@ -33,8 +33,7 @@ export default function App() {
     }));
   };
 
-  const handleTableCellChange = (pageNumber, tableID, cellIndex, newValue) => {
-    console.log(pageNumber, tableID, cellIndex, newValue);
+  const handleTableCellChange = (pageNumber, tableID, cellId, newValue) => {
     setDocData((prev) => ({
       ...prev,
       pages: prev.pages.map((page) => {
@@ -43,9 +42,9 @@ export default function App() {
             ...page,
             elements: page.elements.map((element) => {
               if (element.id === tableID) {
-                // create a new cells array with the updated value
-                const updatedCells = element.tableCells.map((cell, idx) =>
-                  idx === cellIndex ? newValue : cell
+                // Find and update the cell by ID, not by index
+                const updatedCells = element.tableCells.map((cell) =>
+                  cell.id === cellId ? { ...cell, content: newValue } : cell
                 );
 
                 return { ...element, tableCells: updatedCells };
