@@ -31,26 +31,21 @@ processRouter.post('/', upload.single('file'), async (req, res) => {
       pagesToCrop = (input as number[]).map((p) => p - 1); // convert to 0-based
     }
 
-    // Break pdf into two-page documents, needed for testing
-    // TODO: Remove and send entire document to analyseDocument
-    const buffers: Buffer[] = [];
+    // For Azure
+    const newPdfForAzure: PDFDocument = await PDFDocument.create();
+    const copiedPagesForAzure = await newPdfForAzure.copyPages(
+      originalPdf,
+      pagesToCrop
+    );
+    copiedPagesForAzure.forEach((page) => newPdfForAzure.addPage(page));
 
-    for (let i = 0; i < pagesToCrop.length; i += 2) {
-      const newPdf: PDFDocument = await PDFDocument.create();
-
-      const pageIndices = pagesToCrop.slice(i, i + 2);
-      const copiedPages = await newPdf.copyPages(originalPdf, pageIndices);
-      copiedPages.forEach((page) => newPdf.addPage(page));
-
-      const pdfBytes = await newPdf.save();
-
-      buffers.push(Buffer.from(pdfBytes));
-    }
+    const pdfBytesForAzure = await newPdfForAzure.save();
+    const buffers: Buffer[] = [Buffer.from(pdfBytesForAzure)];
 
     const azureResponse: any = await analyseDocument(buffers);
     const structuredText = structureForClient(azureResponse[0]);
 
-    // Create a new PDF with only selected pages, send as response
+    // For client
     const newPdf: PDFDocument = await PDFDocument.create();
     const copiedPages = await newPdf.copyPages(originalPdf, pagesToCrop);
     copiedPages.forEach((page) => newPdf.addPage(page));
