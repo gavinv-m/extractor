@@ -22,26 +22,28 @@ export default function TableElement({
   };
 
   return (
-    <>
-      {table.map((row, rowIndex) => (
-        <tr key={rowIndex}>
-          {row.map((cell, colIndex) => {
-            if (!cell) return null;
-            return (
-              <td
-                key={cell.id}
-                rowSpan={cell.rowSpan || 1}
-                colSpan={cell.colSpan || 1}
-              >
-                <EditableText
-                  value={cell.content}
-                  onChange={(newValue) => handleChange(cell.id, newValue)}
-                />
-              </td>
-            );
-          })}
-        </tr>
-      ))}
-    </>
+    <table>
+      <tbody>
+        {table.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {row.map((cell, colIndex) => {
+              if (!cell) return null;
+              return (
+                <td
+                  key={cell.id}
+                  rowSpan={cell.rowSpan || 1}
+                  colSpan={cell.colSpan || 1}
+                >
+                  <EditableText
+                    value={cell.content}
+                    onChange={(newValue) => handleChange(cell.id, newValue)}
+                  />
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
