@@ -52,16 +52,24 @@ export default function Upload({ onUploadSuccess }) {
     onUploadSuccess(data);
   };
 
+  const acceptedTypes = [
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation', // pptx
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // docx
+    'image/*', // optional if you want to allow images
+  ];
+
   return (
     <div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <input
           type="file"
-          accept="application/pdf"
+          accept={acceptedTypes.join(',')}
           name="uploaded_filex"
           onChange={handleFileChange}
         />
 
+        {/* TODO: Hide buttons for certain types like images */}
         {/* Radio buttons */}
         <div>
           {['single', 'range', 'multiple', 'all'].map((type) => (
