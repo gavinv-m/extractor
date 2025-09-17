@@ -1,0 +1,164 @@
+// ------------------------------
+// Prisma Client Generator
+// ------------------------------
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+// ------------------------------
+// Database Connection
+// ------------------------------
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------
+// Enums
+// ------------------------------
+
+// User roles
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserType {
+  STUDENT
+  PROFESSIONAL
+  OTHER
+}
+
+enum StudentType {
+  UNDERGRAD
+  PHD
+}
+
+enum ProfessionalField {
+  FINANCE
+  LEGAL
+  ENGINEERING
+  MEDICAL
+}
+
+// Subscription plans
+enum PlanType {
+  FREE
+  PRO
+  PREMIUM
+  BUSINESS
+}
+
+// Subscription status
+enum SubscriptionStatus {
+  ACTIVE // Currently active and billing
+  INACTIVE // Never activated or expired
+  CANCELLED // User cancelled, still valid until endDate
+}
+
+// Payment types
+enum PaymentType {
+  SUBSCRIPTION // Recurring plan
+  ADD_ON // Additional pages or features
+}
+
+// Payment status
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// Status for Azure document queries
+enum QueryStatus {
+  PENDING // Query queued
+  PROCESSING // Being processed by Azure
+  COMPLETED // Successfully processed
+  FAILED // Processing failed
+}
+
+// ------------------------------
+// Models
+// ------------------------------
+
+// Users of the platform
+model User {
+  id                String             @id @default(cuid())
+  email             String             @unique
+  name              String?
+  password          String
+  role              UserRole           @default(USER)
+  userType          UserType
+  studentType       StudentType?
+  professionalField ProfessionalField?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  payments      Payment[]
+  subscriptions Subscription[] // User with multiple subscriptions
+  queries       AzureQuery[]
+  auditLogs     AuditLog[]
+  monthlyUsages MonthlyUsage[]
+}
+
+// Tracks user subscriptions
+model Subscription {
+  id        String             @id @default(cuid())
+  user      User               @relation(fields: [userId], references: [id])
+  userId    String
+  plan      PlanType
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime           @default(now())
+  endDate   DateTime? // Null for LIFETIME
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+// Tracks payments (recurring, or one-offs)
+model Payment {
+  id        String        @id @default(cuid())
+  user      User          @relation(fields: [userId], references: [id])
+  userId    String
+  amount    Float
+  currency  String        @default("USD")
+  status    PaymentStatus @default(PENDING)
+  type      PaymentType   @default(SUBSCRIPTION)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now())
+}
+
+// Tracks document processing requests via Azure
+model AzureQuery {
+  id        String      @id @default(cuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  numPages  Int         @default(0) // Pages processed in this query
+  status    QueryStatus @default(PENDING) // For workflow and failed query tracking
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+// Tracks user actions for audit, debugging, or compliance
+model AuditLog {
+  id        String   @id @default(cuid())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  action    String // Description of action
+  meta      Json? // Optional metadata (e.g., payment details)
+  createdAt DateTime @default(now())
+}
+
+// Tracks monthly usage for page limits and recon
+model MonthlyUsage {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  month     DateTime // First day of the subscription
+  pagesUsed Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
