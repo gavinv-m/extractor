@@ -113,7 +113,7 @@ model Subscription {
   plan      PlanType
   status    SubscriptionStatus @default(ACTIVE)
   startDate DateTime           @default(now())
-  endDate   DateTime? // Null for LIFETIME
+  endDate   DateTime
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
 }
