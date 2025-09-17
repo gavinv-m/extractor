@@ -2,7 +2,7 @@ import DocumentIntelligence, {
   isUnexpected,
 } from '@azure-rest/ai-document-intelligence';
 import { AzureKeyCredential } from '@azure/core-auth';
-import { azure } from '../config.ts';
+import { azure } from '../config/index.ts';
 
 export default async function analyseDocument(buffer: Buffer) {
   try {
