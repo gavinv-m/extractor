@@ -3,6 +3,8 @@ import prisma from './client.ts';
 
 /* Queries sorted alphabetically:
     addUser,
+    consumeAddOnPages,
+    createAddOn,
     createAuditLog, 
     createAzureQuery,
     createMonthlyUsage,
@@ -45,6 +47,28 @@ const addUser = async (data: any) => {
     console.error('Failed to add user:', error);
     throw new Error('Could not create user');
   }
+};
+
+// Kept it thin, the logic to assess if we can consume from a certain id will live elsewhere
+const consumeAddOnPages = async (addOnId: string, consume: number) => {
+  return prisma.addOn.update({
+    where: { id: addOnId },
+    data: {
+      pagesUsed: { increment: consume },
+      pagesRemaining: { decrement: consume },
+    },
+  });
+};
+
+const createAddOn = async (userId: string, pages: number) => {
+  return prisma.addOn.create({
+    data: {
+      userId,
+      pages,
+      pagesUsed: 0,
+      pagesRemaining: pages,
+    },
+  });
 };
 
 const createAuditLog = async (
@@ -266,6 +290,8 @@ const updateUser = async (id: string, data: any) => {
 
 const db = {
   addUser,
+  consumeAddOnPages,
+  createAddOn,
   createAuditLog,
   createAzureQuery,
   createMonthlyUsage,
