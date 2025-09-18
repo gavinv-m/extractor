@@ -103,6 +103,8 @@ model User {
   queries       AzureQuery[]
   auditLogs     AuditLog[]
   monthlyUsages MonthlyUsage[]
+  addOns        AddOn[]
+  pageVisits    PageVisit[]
 }
 
 // Tracks user subscriptions
@@ -154,11 +156,43 @@ model AuditLog {
 
 // Tracks monthly usage for page limits and recon
 model MonthlyUsage {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  month     DateTime // First day of the subscription
-  pagesUsed Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(cuid())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  month          DateTime // First day of the subscription
+  pagesUsed      Int      @default(0)
+  pagesRemaining Int // Reset at start of each new month based on plan
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Tracks users who have paid for additional pages beyond subscription
+model AddOn {
+  id             String   @id @default(cuid())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  pages          Int // Total pages purchased
+  pagesUsed      Int      @default(0) // Tracks usage
+  pagesRemaining Int // Consume add on pages before subscription pages
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PageVisit {
+  id        BigInt   @id @default(autoincrement())
+  userId    String? // nullable: for anonymous users use clientId or ip
+  clientId  String? // UUID generated on frontend for tracking anonymous users
+  path      String
+  referrer  String?
+  visitedAt DateTime @default(now())
+  userAgent String?
+  ip        String?
+
+  // Relations (optional)
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([path])
+  @@index([visitedAt])
+  @@index([userId])
+  @@index([clientId])
 }
