@@ -20,9 +20,9 @@ export default async function seedBobUndergrad() {
   await db.createSubscription(
     bob.id,
     'FREE',
+    'INACTIVE', // set Bob’s subscription to inactive
     new Date(),
-    new Date(new Date().setMonth(new Date().getMonth() + 1)),
-    'INACTIVE' // set Bob’s subscription to inactive
+    new Date(new Date().setMonth(new Date().getMonth() + 1))
   );
 
   const subscriptionStart = normaliseDate(new Date());

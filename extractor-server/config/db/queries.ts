@@ -114,9 +114,9 @@ const createPayment = async (data: {
 const createSubscription = async (
   userId: string,
   plan: 'FREE' | 'PRO' | 'PREMIUM' | 'BUSINESS',
+  status: 'ACTIVE' | 'INACTIVE' | 'CANCELLED' = 'ACTIVE', // default to ACTIVE
   startDate: Date,
-  endDate: Date,
-  status: 'ACTIVE' | 'INACTIVE' | 'CANCELLED' = 'ACTIVE' // default to ACTIVE
+  endDate: Date
 ) => {
   return prisma.subscription.create({
     data: {
