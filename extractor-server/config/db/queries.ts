@@ -12,6 +12,7 @@ import prisma from './client.ts';
     getUserById,
     incrementPagesUsed,
     updateAzureQuery,
+    updateMonthlyUsage,
     updatePayment,
     updateSubscription, 
     updateUser
@@ -76,12 +77,17 @@ const createAzureQuery = async (
   });
 };
 
-const createMonthlyUsage = async (userId: string, month: Date) => {
+const createMonthlyUsage = async (
+  userId: string,
+  month: Date,
+  pagesRemaining: number
+) => {
   return prisma.monthlyUsage.create({
     data: {
       userId,
       month,
       pagesUsed: 0,
+      pagesRemaining, // set the starting quota based on plan
     },
   });
 };
@@ -92,7 +98,7 @@ const createPayment = async (data: {
   amount: number;
   currency?: string; // defaults to USD
   status?: 'PENDING' | 'COMPLETED' | 'FAILED';
-  type?: 'SUBSCRIPTION' | 'ONE_TIME';
+  type?: 'SUBSCRIPTION' | 'ADD_ON';
 }) => {
   return prisma.payment.create({
     data: {
@@ -109,7 +115,8 @@ const createSubscription = async (
   userId: string,
   plan: 'FREE' | 'PRO' | 'PREMIUM' | 'BUSINESS',
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  status: 'ACTIVE' | 'INACTIVE' | 'CANCELLED' = 'ACTIVE' // default to ACTIVE
 ) => {
   return prisma.subscription.create({
     data: {
@@ -117,7 +124,7 @@ const createSubscription = async (
       plan,
       startDate: startDate,
       endDate: endDate,
-      status: 'ACTIVE',
+      status,
     },
   });
 };
@@ -171,13 +178,33 @@ const updateAzureQuery = async (
   });
 };
 
+const updateMonthlyUsage = async (
+  userId: string,
+  month: Date,
+  pagesUsed: number
+) => {
+  const usage = await prisma.monthlyUsage.findFirst({
+    where: { userId, month },
+  });
+
+  if (!usage) throw new Error('Monthly usage not found');
+
+  return prisma.monthlyUsage.update({
+    where: { id: usage.id },
+    data: {
+      pagesUsed: usage.pagesUsed + pagesUsed,
+      pagesRemaining: usage.pagesRemaining - pagesUsed,
+    },
+  });
+};
+
 const updatePayment = async (
   id: string,
   data: Partial<{
     amount: number;
     currency: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    type: 'SUBSCRIPTION' | 'ONE_TIME';
+    type: 'SUBSCRIPTION' | 'ADD_ON';
   }>
 ) => {
   return prisma.payment.update({
@@ -190,7 +217,7 @@ const updateSubscription = async (
   id: string,
   data: Partial<{
     plan: 'FREE' | 'PRO' | 'PREMIUM' | 'BUSINESS';
-    status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED';
+    status: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
     startDate: Date;
     endDate: Date;
   }>
@@ -248,6 +275,7 @@ const db = {
   getUserById,
   incrementPagesUsed,
   updateAzureQuery,
+  updateMonthlyUsage,
   updatePayment,
   updateSubscription,
   updateUser,
