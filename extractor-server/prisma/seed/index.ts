@@ -2,6 +2,7 @@ import prisma from '../../config/db/client.ts';
 import seedAliceAdmin from './persona_functions/alice-admin.ts';
 import seedBobUndergrad from './persona_functions/bob-undergrad.ts';
 import seedClaraPhd from './persona_functions/clara-phd.ts';
+import seedDanEngineer from './persona_functions/dan-engineer.ts';
 
 async function main() {
   try {
@@ -25,6 +26,9 @@ async function main() {
 
     await seedClaraPhd();
     console.log('Clara seeded successfully');
+
+    await seedDanEngineer();
+    console.log('Dan seeded successfully');
   } catch (err) {
     console.error('Error seeding:', err);
   } finally {
