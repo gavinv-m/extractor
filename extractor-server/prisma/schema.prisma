@@ -87,7 +87,7 @@ enum QueryStatus {
 model User {
   id                String             @id @default(cuid())
   email             String             @unique
-  name              String?
+  name              String
   password          String
   role              UserRole           @default(USER)
   userType          UserType?
