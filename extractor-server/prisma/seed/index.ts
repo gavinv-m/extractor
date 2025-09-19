@@ -5,6 +5,7 @@ import seedClaraPhd from './persona_functions/clara-phd.ts';
 import seedDanEngineer from './persona_functions/dan-engineer.ts';
 import seedOmarAddOn from './persona_functions/omar-addon.ts';
 import seedMayaZero from './persona_functions/maya-zero.ts';
+import seedEddieExhausted from './persona_functions/eddie-exhausted.ts';
 
 async function main() {
   try {
@@ -37,6 +38,9 @@ async function main() {
 
     await seedMayaZero();
     console.log('Maya seeded successfully');
+
+    await seedEddieExhausted();
+    console.log('Eddie seeded successfully');
   } catch (err) {
     console.error('Error seeding:', err);
   } finally {
