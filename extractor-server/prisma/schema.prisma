@@ -82,6 +82,14 @@ enum QueryStatus {
 // Models
 // ------------------------------
 
+// Store user sessions
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String 
+  expiresAt DateTime
+}
+
 // Users of the platform
 model User {
   id                String             @id @default(cuid())

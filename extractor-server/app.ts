@@ -3,8 +3,9 @@ import appRoutes from './routes/app-routes.ts';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 import deleteFiles from './utils/delete-files.ts';
+import sessionConfig from './config/session.ts';
+import passport from './config/passport.ts';
 
 const __filename = fileURLToPath(import.meta.url); // get current file path
 const __dirname = path.dirname(__filename); // get current directory
@@ -23,6 +24,13 @@ app.use('/tmp', express.static(path.join(__dirname, 'tmp')));
 // Parse JSON payloads
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Set up session
+sessionConfig(app);
+
+// Initialise passport and passport session
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Initialise routes
 app.use('/', appRoutes);
